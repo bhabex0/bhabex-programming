@@ -16,10 +16,6 @@ on:
         default: false
         type: boolean
 
-env:
-  PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 jobs:
   release:
     name: Create Release
@@ -68,10 +64,11 @@ jobs:
           pip install dist/*.whl
           python -c "import bhabex; print('Package works')"
 
-      - name: Publish to PyPI
+      - name: Publish to PyPI (Trusted Publishing)
         if: github.event.inputs.dry_run != 'true'
-        run: |
-          twine upload --repository pypi dist/*
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          print-hash: true
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
