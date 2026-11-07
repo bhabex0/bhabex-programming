@@ -8,7 +8,7 @@ repository = "https://github.com/bxLabs/bhabex"
 
 [dependencies]
 thiserror = "1.0"
-logos = "0.13"
+logos = "0.16"
 indexmap = "2.0"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
