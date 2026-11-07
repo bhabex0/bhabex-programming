@@ -1,0 +1,30 @@
+# Code Owners
+# These users will be requested for review when matching files are changed
+
+# Global owners
+* @bxLabs-core
+
+# Python interpreter
+/bhabex/ @bxLabs-python
+
+# Rust components
+/bhabex_minimal/ @bxLabs-rust
+/velo-compiler/ @bxLabs-rust
+/compiler/ @bxLabs-rust
+/pkg/ @bxLabs-rust
+
+# VS Code extension
+/vscode/ @bxLabs-vscode
+
+# Installers
+/installer/ @bxLabs-devops
+
+# Documentation
+/docs/ @bxLabs-docs
+
+# CI/CD
+/.github/ @bxLabs-devops
+
+# Examples and tests
+/examples/ @bxLabs-qa
+/tests/ @bxLabs-qa

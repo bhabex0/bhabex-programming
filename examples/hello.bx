@@ -1,0 +1,6 @@
+fn main() {
+    print("Hello from Bhabex!")
+    let x = 42
+    let y = 10
+    print(x + y)
+}

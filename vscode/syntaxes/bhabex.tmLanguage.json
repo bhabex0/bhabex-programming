@@ -1,0 +1,261 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "Bhabex",
+    "scopeName": "source.bhabex",
+    "fileTypes": ["bx"],
+    "injectionSelector": "L:source.bhabex - comment - string",
+    "patterns": [
+        { "include": "#comments" },
+        { "include": "#strings" },
+        { "include": "#keywords" },
+        { "include": "#types" },
+        { "include": "#operators" },
+        { "include": "#numbers" },
+        { "include": "#identifiers" },
+        { "include": "#punctuation" },
+        { "include": "#attributes" },
+        { "include": "#macros" }
+    ],
+    "repository": {
+        "comments": {
+            "patterns": [
+                {
+                    "name": "comment.line.double-slash.bhabex",
+                    "match": "//.*$"
+                },
+                {
+                    "name": "comment.block.bhabex",
+                    "begin": "/\\*",
+                    "end": "\\*/",
+                    "patterns": [
+                        { "include": "#comments" }
+                    ]
+                },
+                {
+                    "name": "comment.documentation.bhabex",
+                    "begin": "/\\*\\*",
+                    "end": "\\*/",
+                    "patterns": [
+                        { "include": "#comments" }
+                    ]
+                }
+            ]
+        },
+        "strings": {
+            "patterns": [
+                {
+                    "name": "string.quoted.double.bhabex",
+                    "begin": "\"",
+                    "end": "\"",
+                    "patterns": [
+                        { "include": "#escape-sequences" }
+                    ]
+                },
+                {
+                    "name": "string.quoted.single.bhabex",
+                    "begin": "'",
+                    "end": "'",
+                    "patterns": [
+                        { "include": "#escape-sequences" }
+                    ]
+                },
+                {
+                    "name": "string.quoted.raw.bhabex",
+                    "begin": "r#*\"",
+                    "end": "\"#*",
+                    "patterns": [
+                        { "include": "#escape-sequences" }
+                    ]
+                },
+                {
+                    "name": "string.quoted.single.char.bhabex",
+                    "match": "'.'"
+                }
+            ]
+        },
+        "escape-sequences": {
+            "patterns": [
+                {
+                    "name": "constant.character.escape.bhabex",
+                    "match": "\\\\[nrt\\\\\"'0]"
+                },
+                {
+                    "name": "constant.character.escape.unicode.bhabex",
+                    "match": "\\\\u[0-9a-fA-F]{4}"
+                },
+                {
+                    "name": "constant.character.escape.unicode.bhabex",
+                    "match": "\\\\U[0-9a-fA-F]{8}"
+                }
+            ]
+        },
+        "keywords": {
+            "patterns": [
+                {
+                    "name": "keyword.control.bhabex",
+                    "match": "\\b(if|else|match|for|while|loop|break|continue|return)\\b"
+                },
+                {
+                    "name": "keyword.declaration.bhabex",
+                    "match": "\\b(fn|let|mut|const|static|struct|enum|trait|impl|type|macro|mod|import|export|use|as)\\b"
+                },
+                {
+                    "name": "keyword.async.bhabex",
+                    "match": "\\b(async|await|spawn|try|catch|throw)\\b"
+                },
+                {
+                    "name": "keyword.unsafe.bhabex",
+                    "match": "\\b(unsafe|extern)\\b"
+                },
+                {
+                    "name": "keyword.other.bhabex",
+                    "match": "\\b(pub|where|in|is|Self|self|super|crate)\\b"
+                },
+                {
+                    "name": "constant.language.bhabex",
+                    "match": "\\b(true|false|null)\\b"
+                }
+            ]
+        },
+        "types": {
+            "patterns": [
+                {
+                    "name": "storage.type.primitive.bhabex",
+                    "match": "\\b(i8|i16|i32|i64|i128|isize|u8|u16|u32|u64|u128|usize|f32|f64|bool|char|str|string|never|unit)\\b"
+                },
+                {
+                    "name": "storage.type.generic.bhabex",
+                    "match": "\\b(Vec|HashMap|HashSet|Option|Result|Box|Rc|Arc|Ref|RefMut|String)\\b"
+                },
+                {
+                    "name": "storage.type.function.bhabex",
+                    "match": "\\bfn\\b"
+                },
+                {
+                    "name": "storage.modifier.bhabex",
+                    "match": "\\b(mut|ref|move|async|const)\\b"
+                }
+            ]
+        },
+        "operators": {
+            "patterns": [
+                {
+                    "name": "keyword.operator.arithmetic.bhabex",
+                    "match": "[+\\-*/%]"
+                },
+                {
+                    "name": "keyword.operator.comparison.bhabex",
+                    "match": "(==|!=|<=|>=|<|>)"
+                },
+                {
+                    "name": "keyword.operator.logical.bhabex",
+                    "match": "(&&|\\|\\||!)"
+                },
+                {
+                    "name": "keyword.operator.bitwise.bhabex",
+                    "match": "(&|\\||\\^|~|<<|>>)"
+                },
+                {
+                    "name": "keyword.operator.assignment.bhabex",
+                    "match": "=|\\+=|-=|\\*=|/=|%=|&=|\\|=|\\^=|<<=|>>="
+                },
+                {
+                    "name": "keyword.operator.other.bhabex",
+                    "match": "(\\.\\.\\.?|->|=>|::|\\?|\\!)"
+                }
+            ]
+        },
+        "numbers": {
+            "patterns": [
+                {
+                    "name": "constant.numeric.float.bhabex",
+                    "match": "\\b\\d+\\.\\d+([eE][+-]?\\d+)?\\b"
+                },
+                {
+                    "name": "constant.numeric.hex.bhabex",
+                    "match": "\\b0x[0-9a-fA-F_]+\\b"
+                },
+                {
+                    "name": "constant.numeric.octal.bhabex",
+                    "match": "\\b0o[0-7_]+\\b"
+                },
+                {
+                    "name": "constant.numeric.binary.bhabex",
+                    "match": "\\b0b[01_]+\\b"
+                },
+                {
+                    "name": "constant.numeric.integer.bhabex",
+                    "match": "\\b\\d[\\d_]*\\b"
+                }
+            ]
+        },
+        "identifiers": {
+            "patterns": [
+                {
+                    "name": "entity.name.function.bhabex",
+                    "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b(?=\\s*\\()"
+                },
+                {
+                    "name": "entity.name.type.bhabex",
+                    "match": "\\b[A-Z][a-zA-Z0-9_]*\\b"
+                },
+                {
+                    "name": "variable.parameter.bhabex",
+                    "match": "\\b[a-z_][a-zA-Z0-9_]*\\b(?=\\s*:)"
+                },
+                {
+                    "name": "variable.other.bhabex",
+                    "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
+                }
+            ]
+        },
+        "punctuation": {
+            "patterns": [
+                {
+                    "name": "punctuation.terminator.statement.bhabex",
+                    "match": ";"
+                },
+                {
+                    "name": "punctuation.separator.bhabex",
+                    "match": ","
+                },
+                {
+                    "name": "punctuation.definition.bhabex",
+                    "match": ":|::|\\.\\.\\.?|->|=>"
+                },
+                {
+                    "name": "punctuation.section.brackets.bhabex",
+                    "match": "[\\[\\]{}()]"
+                }
+            ]
+        },
+        "attributes": {
+            "patterns": [
+                {
+                    "name": "meta.attribute.bhabex",
+                    "begin": "#\\[",
+                    "end": "\\]",
+                    "patterns": [
+                        { "include": "#attributes" }
+                    ]
+                },
+                {
+                    "name": "meta.attribute.bhabex",
+                    "begin": "@\\[",
+                    "end": "\\]",
+                    "patterns": [
+                        { "include": "#attributes" }
+                    ]
+                }
+            ]
+        },
+        "macros": {
+            "patterns": [
+                {
+                    "name": "macro.bhabex",
+                    "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*!"
+                }
+            ]
+        }
+    }
+}

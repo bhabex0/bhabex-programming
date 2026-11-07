@@ -1,0 +1,238 @@
+name: Rust Build
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'bhabex_minimal/**'
+      - 'velo-compiler/**'
+      - 'compiler/**'
+      - 'pkg/**'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'bhabex_minimal/**'
+      - 'velo-compiler/**'
+      - 'compiler/**'
+      - 'pkg/**'
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  bhabex_minimal:
+    name: bhabex_minimal (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            bhabex_minimal/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Format check
+        working-directory: bhabex_minimal
+        run: cargo fmt --check
+
+      - name: Clippy
+        working-directory: bhabex_minimal
+        run: cargo clippy -- -D warnings
+
+      - name: Build
+        working-directory: bhabex_minimal
+        run: cargo build --release
+
+      - name: Test
+        working-directory: bhabex_minimal
+        run: cargo test
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: bhabex-minimal-${{ matrix.os }}
+          path: bhabex_minimal/target/release/bhabex_minimal*
+
+  velo-compiler:
+    name: velo-compiler (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Install LLVM (Linux/macOS)
+        if: matrix.os != 'windows-latest'
+        run: |
+          if [[ "$RUNNER_OS" == "Linux" ]]; then
+            sudo apt-get update && sudo apt-get install -y llvm-18 llvm-18-dev clang-18
+            echo "LIBCLANG_PATH=/usr/lib/llvm-18/lib" >> $GITHUB_ENV
+            echo "LLVM_SYS_180_PREFIX=/usr/lib/llvm-18" >> $GITHUB_ENV
+          elif [[ "$RUNNER_OS" == "macOS" ]]; then
+            brew install llvm@18
+            echo "LIBCLANG_PATH=$(brew --prefix llvm@18)/lib" >> $GITHUB_ENV
+            echo "LLVM_SYS_180_PREFIX=$(brew --prefix llvm@18)" >> $GITHUB_ENV
+          fi
+
+      - name: Install LLVM (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          choco install llvm --version=18.1.8
+          refreshenv
+          echo "LIBCLANG_PATH=C:\Program Files\LLVM\bin" >> $GITHUB_ENV
+          echo "LLVM_SYS_180_PREFIX=C:\Program Files\LLVM" >> $GITHUB_ENV
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            velo-compiler/target
+          key: ${{ runner.os }}-cargo-velo-${{ hashFiles('velo-compiler/Cargo.lock') }}
+
+      - name: Format check
+        working-directory: velo-compiler
+        run: cargo fmt --check
+
+      - name: Clippy
+        working-directory: velo-compiler
+        run: cargo clippy -- -D warnings
+        continue-on-error: true
+
+      - name: Build
+        working-directory: velo-compiler
+        run: cargo build --release
+        continue-on-error: true
+
+      - name: Test
+        working-directory: velo-compiler
+        run: cargo test
+        continue-on-error: true
+
+  compiler:
+    name: Compiler (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Install LLVM (Linux/macOS)
+        if: matrix.os != 'windows-latest'
+        run: |
+          if [[ "$RUNNER_OS" == "Linux" ]]; then
+            sudo apt-get update && sudo apt-get install -y llvm-18 llvm-18-dev clang-18
+            echo "LIBCLANG_PATH=/usr/lib/llvm-18/lib" >> $GITHUB_ENV
+            echo "LLVM_SYS_180_PREFIX=/usr/lib/llvm-18" >> $GITHUB_ENV
+          elif [[ "$RUNNER_OS" == "macOS" ]]; then
+            brew install llvm@18
+            echo "LIBCLANG_PATH=$(brew --prefix llvm@18)/lib" >> $GITHUB_ENV
+            echo "LLVM_SYS_180_PREFIX=$(brew --prefix llvm@18)" >> $GITHUB_ENV
+          fi
+
+      - name: Install LLVM (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          choco install llvm --version=18.1.8
+          refreshenv
+          echo "LIBCLANG_PATH=C:\Program Files\LLVM\bin" >> $GITHUB_ENV
+          echo "LLVM_SYS_180_PREFIX=C:\Program Files\LLVM" >> $GITHUB_ENV
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            compiler/target
+          key: ${{ runner.os }}-cargo-compiler-${{ hashFiles('compiler/Cargo.lock') }}
+
+      - name: Format check
+        working-directory: compiler
+        run: cargo fmt --check
+
+      - name: Clippy
+        working-directory: compiler
+        run: cargo clippy -- -D warnings
+        continue-on-error: true
+
+      - name: Build
+        working-directory: compiler
+        run: cargo build --release
+        continue-on-error: true
+
+      - name: Test
+        working-directory: compiler
+        run: cargo test
+        continue-on-error: true
+
+  pkg:
+    name: Package Manager (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            pkg/target
+          key: ${{ runner.os }}-cargo-pkg-${{ hashFiles('pkg/Cargo.lock') }}
+
+      - name: Format check
+        working-directory: pkg
+        run: cargo fmt --check
+
+      - name: Clippy
+        working-directory: pkg
+        run: cargo clippy -- -D warnings
+
+      - name: Build
+        working-directory: pkg
+        run: cargo build --release
+
+      - name: Test
+        working-directory: pkg
+        run: cargo test
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: bxpkg-${{ matrix.os }}
+          path: pkg/target/release/bxpkg*

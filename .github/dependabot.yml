@@ -1,0 +1,93 @@
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "python"
+    groups:
+      dev-dependencies:
+        patterns:
+          - "pytest*"
+          - "black"
+          - "mypy"
+          - "ruff"
+          - "pytest-asyncio"
+      docs-dependencies:
+        patterns:
+          - "sphinx*"
+          - "myst-parser"
+          - "sphinx-rtd-theme"
+      http-dependencies:
+        patterns:
+          - "aiohttp*"
+      crypto-dependencies:
+        patterns:
+          - "cryptography*"
+      db-dependencies:
+        patterns:
+          - "aiosqlite*"
+
+  - package-ecosystem: "cargo"
+    directory: "/bhabex_minimal"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "rust"
+      - "bhabex_minimal"
+
+  - package-ecosystem: "cargo"
+    directory: "/velo-compiler"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "rust"
+      - "velo-compiler"
+
+  - package-ecosystem: "cargo"
+    directory: "/compiler"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "rust"
+      - "compiler"
+
+  - package-ecosystem: "cargo"
+    directory: "/pkg"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "rust"
+      - "pkg"
+
+  - package-ecosystem: "npm"
+    directory: "/vscode"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "vscode"

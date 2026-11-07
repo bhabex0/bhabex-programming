@@ -1,0 +1,237 @@
+{
+    "name": "bhabex",
+    "displayName": "Bhabex Language Support",
+    "description": "Syntax highlighting, IntelliSense, and debugging for Bhabex (.bx) files",
+    "version": "0.1.0",
+    "publisher": "bxLabs",
+    "license": "MIT",
+    "icon": "assets/bhabex-icon.png",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/bxLabs/bhabex"
+    },
+    "homepage": "https://bhabex.dev",
+    "bugs": {
+        "url": "https://github.com/bxLabs/bhabex/issues"
+    },
+    "engines": {
+        "vscode": "^1.80.0"
+    },
+    "categories": [
+        "Programming Languages",
+        "Snippets",
+        "Linters",
+        "Debuggers"
+    ],
+    "keywords": [
+        "bhabex",
+        "bx",
+        "language",
+        "compiler",
+        "programming"
+    ],
+    "activationEvents": [
+        "onLanguage:bhabex",
+        "onDebug",
+        "workspaceContains:bxpkg.toml"
+    ],
+    "main": "./out/extension.js",
+    "contributes": {
+        "languages": [
+            {
+                "id": "bhabex",
+                "aliases": [
+                    "Bhabex",
+                    "bx"
+                ],
+                "extensions": [
+                    ".bx"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "bhabex",
+                "scopeName": "source.bhabex",
+                "path": "./syntaxes/bhabex.tmLanguage.json"
+            }
+        ],
+        "snippets": [
+            {
+                "language": "bhabex",
+                "path": "./snippets/bhabex.json"
+            }
+        ],
+        "commands": [
+            {
+                "command": "bhabex.build",
+                "title": "Bhabex: Build Project",
+                "category": "Bhabex"
+            },
+            {
+                "command": "bhabex.run",
+                "title": "Bhabex: Run File",
+                "category": "Bhabex"
+            },
+            {
+                "command": "bhabex.check",
+                "title": "Bhabex: Check Syntax",
+                "category": "Bhabex"
+            },
+            {
+                "command": "bhabex.fmt",
+                "title": "Bhabex: Format Document",
+                "category": "Bhabex"
+            },
+            {
+                "command": "bhabex.test",
+                "title": "Bhabex: Run Tests",
+                "category": "Bhabex"
+            },
+            {
+                "command": "bhabex.newProject",
+                "title": "Bhabex: New Project",
+                "category": "Bhabex"
+            },
+            {
+                "command": "bhabex.addDependency",
+                "title": "Bhabex: Add Dependency",
+                "category": "Bhabex"
+            },
+            {
+                "command": "bhabex.showOutput",
+                "title": "Bhabex: Show Output",
+                "category": "Bhabex"
+            }
+        ],
+        "menus": {
+            "editor/context": [
+                {
+                    "when": "resourceLangId == bhabex",
+                    "command": "bhabex.run",
+                    "group": "navigation"
+                },
+                {
+                    "when": "resourceLangId == bhabex",
+                    "command": "bhabex.fmt",
+                    "group": "modification"
+                }
+            ],
+            "explorer/context": [
+                {
+                    "when": "resourceExtname == .bx",
+                    "command": "bhabex.run"
+                }
+            ],
+            "commandPalette": [
+                {
+                    "command": "bhabex.build",
+                    "when": "workspaceContains:bxpkg.toml"
+                },
+                {
+                    "command": "bhabex.test",
+                    "when": "workspaceContains:bxpkg.toml"
+                }
+            ]
+        },
+        "keybindings": [
+            {
+                "command": "bhabex.build",
+                "key": "ctrl+shift+b",
+                "mac": "cmd+shift+b",
+                "when": "workspaceContains:bxpkg.toml"
+            },
+            {
+                "command": "bhabex.run",
+                "key": "f5",
+                "when": "resourceLangId == bhabex"
+            },
+            {
+                "command": "bhabex.fmt",
+                "key": "shift+alt+f",
+                "when": "resourceLangId == bhabex"
+            },
+            {
+                "command": "bhabex.check",
+                "key": "ctrl+shift+c",
+                "mac": "cmd+shift+c",
+                "when": "resourceLangId == bhabex"
+            }
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "Bhabex",
+            "properties": {
+                "bhabex.executablePath": {
+                    "type": "string",
+                    "default": "bx",
+                    "description": "Path to the bx executable"
+                },
+                "bhabex.formatOnSave": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Format on save"
+                },
+                "bhabex.lintOnSave": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Lint on save"
+                },
+                "bhabex.target": {
+                    "type": "string",
+                    "enum": ["native", "wasm", "android", "ios"],
+                    "default": "native",
+                    "description": "Default compilation target"
+                },
+                "bhabex.buildFlags": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "default": [],
+                    "description": "Additional build flags"
+                }
+            }
+        },
+        "debuggers": [
+            {
+                "type": "bhabex",
+                "label": "Bhabex",
+                "program": "${workspaceFolder}/bxpkg.toml",
+                "runtime": "bx",
+                "runtimeArgs": ["debug"],
+                "sourceLanguages": ["bhabex"]
+            }
+        ],
+        "views": {
+            "explorer": [
+                {
+                    "id": "bhabex.packages",
+                    "name": "Bhabex Packages",
+                    "when": "workspaceContains:bxpkg.toml"
+                }
+            ]
+        },
+        "viewsWelcome": [
+            {
+                "view": "bhabex.packages",
+                "contents": "No Bhabex project found. Create a new project with 'Bhabex: New Project' command."
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "pretest": "npm run compile && npm run lint",
+        "lint": "eslint src --ext ts",
+        "test": "node ./out/test/runTest.js"
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.80.0",
+        "@types/node": "18.x",
+        "@types/mocha": "^10.0.0",
+        "typescript": "^5.0.0",
+        "eslint": "^8.0.0",
+        "vscode-test": "^1.6.0"
+    }
+}

@@ -1,0 +1,257 @@
+{
+    "Hello World": {
+        "prefix": "hello",
+        "body": [
+            "fn main() {",
+            "    println(\"Hello, World!\");",
+            "}"
+        ],
+        "description": "Hello World program"
+    },
+    "Function": {
+        "prefix": "fn",
+        "body": [
+            "fn ${1:name}(${2:params}) -> ${3:Type} {",
+            "    ${4:// body}",
+            "}"
+        ],
+        "description": "Function definition"
+    },
+    "Async Function": {
+        "prefix": "async fn",
+        "body": [
+            "async fn ${1:name}(${2:params}) -> ${3:Type} {",
+            "    ${4:// body}",
+            "}"
+        ],
+        "description": "Async function definition"
+    },
+    "Struct": {
+        "prefix": "struct",
+        "body": [
+            "struct ${1:Name} {",
+            "    ${2:field}: ${3:Type},",
+            "}"
+        ],
+        "description": "Struct definition"
+    },
+    "Enum": {
+        "prefix": "enum",
+        "body": [
+            "enum ${1:Name} {",
+            "    ${2:Variant}(${3:Type}),",
+            "    ${4:OtherVariant},",
+            "}"
+        ],
+        "description": "Enum definition"
+    },
+    "Trait": {
+        "prefix": "trait",
+        "body": [
+            "trait ${1:Name} {",
+            "    fn ${2:method}(${3:params}) -> ${4:Type};",
+            "}"
+        ],
+        "description": "Trait definition"
+    },
+    "Impl Block": {
+        "prefix": "impl",
+        "body": [
+            "impl ${1:Trait} for ${2:Type} {",
+            "    fn ${3:method}(${4:params}) -> ${5:Type} {",
+            "        ${6:// body}",
+            "    }",
+            "}"
+        ],
+        "description": "Impl block"
+    },
+    "If Statement": {
+        "prefix": "if",
+        "body": [
+            "if ${1:condition} {",
+            "    ${2:// then}",
+            "} else {",
+            "    ${3:// else}",
+            "}"
+        ],
+        "description": "If-else statement"
+    },
+    "Match Expression": {
+        "prefix": "match",
+        "body": [
+            "match ${1:expr} {",
+            "    ${2:pattern} => ${3:result},",
+            "    _ => ${4:default},",
+            "}"
+        ],
+        "description": "Match expression"
+    },
+    "For Loop": {
+        "prefix": "for",
+        "body": [
+            "for ${1:item} in ${2:iterable} {",
+            "    ${3:// body}",
+            "}"
+        ],
+        "description": "For loop"
+    },
+    "While Loop": {
+        "prefix": "while",
+        "body": [
+            "while ${1:condition} {",
+            "    ${2:// body}",
+            "}"
+        ],
+        "description": "While loop"
+    },
+    "Try-Catch": {
+        "prefix": "try",
+        "body": [
+            "try {",
+            "    ${1:// risky code}",
+            "} catch ${2:Error} as ${3:e} {",
+            "    ${4:// handle error}",
+            "}"
+        ],
+        "description": "Try-catch block"
+    },
+    "Async Spawn": {
+        "prefix": "spawn",
+        "body": [
+            "spawn || {",
+            "    ${1:// async task}",
+            "}"
+        ],
+        "description": "Spawn async task"
+    },
+    "Channel": {
+        "prefix": "chan",
+        "body": [
+            "let (tx, rx) = Channel::new();",
+            "spawn || tx.send(${1:value});",
+            "let ${2:value} = rx.recv();"
+        ],
+        "description": "Channel communication"
+    },
+    "Async HTTP Request": {
+        "prefix": "http",
+        "body": [
+            "let resp = http.get(\"${1:url}\").await?;",
+            "let ${2:json} = resp.json().await?;"
+        ],
+        "description": "Async HTTP GET request"
+    },
+    "Test Function": {
+        "prefix": "test",
+        "body": [
+            "#[test]",
+            "fn ${1:test_name}() {",
+            "    ${2:// test code}",
+            "}"
+        ],
+        "description": "Test function"
+    },
+    "Module": {
+        "prefix": "mod",
+        "body": [
+            "mod ${1:name} {",
+            "    ${2:// items}",
+            "}"
+        ],
+        "description": "Module definition"
+    },
+    "Import": {
+        "prefix": "import",
+        "body": [
+            "import ${1:path};"
+        ],
+        "description": "Import statement"
+    },
+    "Type Alias": {
+        "prefix": "type",
+        "body": [
+            "type ${1:Name} = ${2:Type};"
+        ],
+        "description": "Type alias"
+    },
+    "Constant": {
+        "prefix": "const",
+        "body": [
+            "const ${1:NAME}: ${2:Type} = ${3:value};"
+        ],
+        "description": "Constant definition"
+    },
+    "Macro": {
+        "prefix": "macro",
+        "body": [
+            "macro ${1:name}(${2:params}) {",
+            "    ${3:// macro body}",
+            "}"
+        ],
+        "description": "Macro definition"
+    },
+    "Main Function": {
+        "prefix": "main",
+        "body": [
+            "fn main() {",
+            "    ${1:// code}",
+            "}"
+        ],
+        "description": "Main entry point"
+    },
+    "Print": {
+        "prefix": "print",
+        "body": [
+            "println(${1:value});"
+        ],
+        "description": "Print to stdout"
+    },
+    "Return": {
+        "prefix": "ret",
+        "body": [
+            "return ${1:value};"
+        ],
+        "description": "Return statement"
+    },
+    "Closure": {
+        "prefix": "closure",
+        "body": [
+            "|${1:params}| ${2:expr}"
+        ],
+        "description": "Closure expression"
+    },
+    "Range": {
+        "prefix": "range",
+        "body": [
+            "${1:start}..${2:end}"
+        ],
+        "description": "Range expression (exclusive)"
+    },
+    "Range Inclusive": {
+        "prefix": "rangei",
+        "body": [
+            "${1:start}..=${2:end}"
+        ],
+        "description": "Range expression (inclusive)"
+    },
+    "Option Match": {
+        "prefix": "opt",
+        "body": [
+            "match ${1:opt} {",
+            "    Some(${2:value}) => ${3:// handle some},",
+            "    None => ${4:// handle none},",
+            "}"
+        ],
+        "description": "Match on Option"
+    },
+    "Result Match": {
+        "prefix": "res",
+        "body": [
+            "match ${1:result} {",
+            "    Ok(${2:value}) => ${3:// handle ok},",
+            "    Err(${4:err}) => ${5:// handle err},",
+            "}"
+        ],
+        "description": "Match on Result"
+    }
+}

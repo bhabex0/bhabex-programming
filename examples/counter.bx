@@ -1,0 +1,32 @@
+class Counter {
+    fn init() {
+        this.count = 0
+    }
+    
+    fn increment() {
+        this.count = this.count + 1
+    }
+    
+    fn get() {
+        return this.count
+    }
+    
+    fn reset() {
+        this.count = 0
+    }
+}
+
+fn main() {
+    let c = Counter()
+    print("Initial count:", c.get())
+    
+    c.increment()
+    print("After increment:", c.get())
+    
+    c.increment()
+    c.increment()
+    print("After two more increments:", c.get())
+    
+    c.reset()
+    print("After reset:", c.get())
+}
